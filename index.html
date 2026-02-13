@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantitative Trading Research | Advanced Trading Strategies</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #3b82f6;
+            --accent-light: #60a5fa;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, #1a1f3a 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            z-index: 1000;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--accent-light);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--accent-light) 0%, #93c5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        section {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Concepts Grid */
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, var(--secondary) 0%, rgba(30, 41, 59, 0.8) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.2);
+        }
+
+        .concept-card:hover::before {
+            left: 100%;
+        }
+
+        .concept-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .concept-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--accent-light);
+        }
+
+        .concept-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .concept-tags {
+            margin-top: 1.2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--accent-light);
+            font-weight: 600;
+        }
+
+        /* Categories */
+        .category-section {
+            margin-bottom: 4rem;
+        }
+
+        .category-title {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--accent);
+            color: var(--accent-light);
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .stat {
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 4rem;
+        }
+
+        footer p {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--accent-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .concepts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 4rem 1.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Scroll Animation */
+        .fade-in {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">⚡ QTrade Research</div>
+            <ul>
+                <li><a href="#concepts">Concepts</a></li>
+                <li><a href="#strategies">Strategies</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Quantitative Trading Research</h1>
+        <p>Exploring advanced mathematical and statistical frameworks for systematic trading strategy development, portfolio optimization, and risk management.</p>
+        <a href="#concepts" class="cta-button">Explore Concepts</a>
+    </section>
+
+    <main>
+        <!-- Stats Section -->
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">25+</div>
+                <div class="stat-label">Advanced Concepts</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Core Categories</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">ML</div>
+                <div class="stat-label">Powered by AI/ML</div>
+            </div>
+        </div>
+
+        <!-- Statistical Methods Section -->
+        <section id="concepts">
+            <div class="section-header">
+                <h2>Statistical & Signal Processing</h2>
+                <p>Mathematical foundations for analyzing market behavior and extracting trading signals</p>
+            </div>
+
+            <div class="category-title">Core Statistical Methods</div>
+            <div class="concepts-grid">
+                <div class="concept-card">
+                    <div class="concept-icon">📊</div>
+                    <div class="concept-title">GARCH Models</div>
+                    <div class="concept-description">Generalized Autoregressive Conditional Heteroskedasticity models volatility clustering, capturing how periods of high volatility tend to be followed by more volatility.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Volatility</span>
+                        <span class="tag">Time Series</span>
+                        <span class="tag">Risk</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">🔄</div>
+                    <div class="concept-title">Ornstein-Uhlenbeck Process</div>
+                    <div class="concept-description">Mean-reverting stochastic process models assets that revert to a long-term mean. Essential for pairs trading and statistical arbitrage.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Mean Reversion</span>
+                        <span class="tag">Stochastic</span>
+                        <span class="tag">Pairs Trading</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">📐</div>
+                    <div class="concept-title">Kalman Filter</div>
+                    <div class="concept-description">Recursive algorithm that estimates hidden state in noisy systems. Used for price prediction, trend extraction, and optimal signal filtering.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Filtering</span>
+                        <span class="tag">Prediction</span>
+                        <span class="tag">Noise Reduction</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">〰️</div>
+                    <div class="concept-title">Hurst Exponent</div>
+                    <div class="concept-description">Measures the long-term memory of time series. Values > 0.5 indicate trending markets; values < 0.5 indicate mean-reverting behavior.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Mean Reversion</span>
+                        <span class="tag">Trending</span>
+                        <span class="tag">Market Regime</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">📈</div>
+                    <div class="concept-title">Z-Score Analysis</div>
+                    <div class="concept-description">Standardizes deviations from mean in units of standard deviation. Identifies overbought/oversold conditions and statistical anomalies for mean reversion trades.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Statistics</span>
+                        <span class="tag">Normalization</span>
+                        <span class="tag">Signals</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">🌊</div>
+                    <div class="concept-title">Hilbert Transform</div>
+                    <div class="concept-description">Extracts phase and amplitude information from signals. Used to identify trend changes and cycle turning points in price data.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Signal Processing</span>
+                        <span class="tag">Phase</span>
+                        <span class="tag">Cycles</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">⚡</div>
+                    <div class="concept-title">FFT (Fast Fourier Transform)</div>
+                    <div class="concept-description">Decomposes price signals into frequency components. Identifies dominant market cycles and periodicities for predictive modeling.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Frequency Domain</span>
+                        <span class="tag">Cycles</span>
+                        <span class="tag">Fourier</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">🎲</div>
+                    <div class="concept-title">Shannon Entropy</div>
+                    <div class="concept-description">Measures information disorder in price data. High entropy indicates randomness; low entropy indicates predictable patterns for actionable signals.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Information Theory</span>
+                        <span class="tag">Randomness</span>
+                        <span class="tag">Prediction</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-title" style="margin-top: 3rem;">Feature Engineering & Labeling</div>
+            <div class="concepts-grid">
+                <div class="concept-card">
+                    <div class="concept-icon">🔀</div>
+                    <div class="concept-title">Fractional Differentiation</div>
+                    <div class="concept-description">De Prado's technique to make non-stationary price series stationary while retaining memory. Solves look-ahead bias in ML models without losing historical information.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Stationarity</span>
+                        <span class="tag">ML Preprocessing</span>
+                        <span class="tag">De Prado</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">🎯</div>
+                    <div class="concept-title">Triple Barrier Method</div>
+                    <div class="concept-description">De Prado's approach to create ML labels from price movements. Sets profit-taking, stop-loss, and time-based barriers to generate precise, realistic training labels.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Labeling</span>
+                        <span class="tag">ML Training</span>
+                        <span class="tag">De Prado</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">🔗</div>
+                    <div class="concept-title">Correlation & Causality</div>
+                    <div class="concept-description">Analyzes cross-asset relationships and lagged dependencies. Identifies leading indicators and predictive relationships between instruments.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Relationships</span>
+                        <span class="tag">Leading Indicators</span>
+                        <span class="tag">Multi-Asset</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Machine Learning & Advanced Methods -->
+        <section id="strategies">
+            <div class="section-header">
+                <h2>Machine Learning & Advanced Techniques</h2>
+                <p>Leveraging AI for pattern recognition, prediction, and adaptive trading systems</p>
+            </div>
+
+            <div class="category-title">ML Models & Algorithms</div>
+            <div class="concepts-grid">
+                <div class="concept-card">
+                    <div class="concept-icon">🌳</div>
+                    <div class="concept-title">XGBoost & Gradient Boosting</div>
+                    <div class="concept-description">Ensemble learning method combining weak learners. Excellent for price prediction, feature importance analysis, and non-linear pattern detection in financial data.</div>
+                    <div class="concept-tags">
+                        <span class="tag">ML</span>
+                        <span class="tag">Ensemble</span>
+                        <span class="tag">Prediction</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">🧠</div>
+                    <div class="concept-title">Neural Networks & LSTM</div>
+                    <div class="concept-description">Deep learning models for sequential data. LSTMs capture long-term dependencies in price sequences for improved forecasting and pattern recognition.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Deep Learning</span>
+                        <span class="tag">Sequential</span>
+                        <span class="tag">Forecasting</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">🎲</div>
+                    <div class="concept-title">Random Forest</div>
+                    <div class="concept-description">Ensemble of decision trees for robust classification and regression. Handles non-linear relationships and provides feature importance rankings.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Ensemble</span>
+                        <span class="tag">Feature Selection</span>
+                        <span class="tag">Robustness</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">🔍</div>
+                    <div class="concept-title">Support Vector Machines</div>
+                    <div class="concept-description">Finds optimal hyperplanes for classification. Effective for market regime detection and directional prediction with kernel methods for non-linear boundaries.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Classification</span>
+                        <span class="tag">Kernels</span>
+                        <span class="tag">Boundary</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">🌀</div>
+                    <div class="concept-title">Reinforcement Learning</div>
+                    <div class="concept-description">Agent learns optimal trading policies through reward signals. Enables dynamic strategy adaptation and multi-objective portfolio management.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Adaptive</span>
+                        <span class="tag">Policy Learning</span>
+                        <span class="tag">Agents</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">📉</div>
+                    <div class="concept-title">Dimensionality Reduction</div>
+                    <div class="concept-description">PCA, t-SNE reduce feature space while preserving variance. Improves model interpretability, reduces overfitting, and accelerates training on high-dimensional market data.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Feature Reduction</span>
+                        <span class="tag">PCA</span>
+                        <span class="tag">Visualization</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-title" style="margin-top: 3rem;">Chaos & Nonlinear Dynamics</div>
+            <div class="concepts-grid">
+                <div class="concept-card">
+                    <div class="concept-icon">🌪️</div>
+                    <div class="concept-title">Lyapunov Exponent</div>
+                    <div class="concept-description">Measures system sensitivity to initial conditions. Positive values indicate chaotic behavior; used to assess market predictability and regime changes.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Chaos Theory</span>
+                        <span class="tag">Predictability</span>
+                        <span class="tag">Dynamics</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">📏</div>
+                    <div class="concept-title">Fractal Dimension</div>
+                    <div class="concept-description">Self-similar scaling properties of price movements. Quantifies market roughness and complexity for optimal position sizing and risk management.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Fractals</span>
+                        <span class="tag">Scaling</span>
+                        <span class="tag">Complexity</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">🔗</div>
+                    <div class="concept-title">Attractor Analysis</div>
+                    <div class="concept-description">Reconstructs hidden market attractors from observable price data. Reveals underlying dynamics and identifies regime transitions for strategic positioning.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Nonlinear Dynamics</span>
+                        <span class="tag">State Space</span>
+                        <span class="tag">Regimes</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio & Risk Section -->
+        <section>
+            <div class="section-header">
+                <h2>Portfolio Optimization & Risk Management</h2>
+                <p>Advanced methods for portfolio construction, diversification, and risk control</p>
+            </div>
+
+            <div class="category-title">Key Frameworks</div>
+            <div class="concepts-grid">
+                <div class="concept-card">
+                    <div class="concept-icon">⚖️</div>
+                    <div class="concept-title">Modern Portfolio Theory</div>
+                    <div class="concept-description">Markowitz's framework optimizing return-to-risk ratio. Foundation for constructing efficient frontiers and mean-variance optimal portfolios.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Portfolio</span>
+                        <span class="tag">Optimization</span>
+                        <span class="tag">Classic</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">📊</div>
+                    <div class="concept-title">Risk Parity</div>
+                    <div class="concept-description">Allocates positions to equalize risk contribution rather than capital. Creates more stable returns across market regimes and reduces concentration risk.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Allocation</span>
+                        <span class="tag">Risk Weighting</span>
+                        <span class="tag">Stability</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">📈</div>
+                    <div class="concept-title">Maximum Sharpe Ratio</div>
+                    <div class="concept-description">Optimizes risk-adjusted returns by maximizing return per unit of risk. Widely used for determining optimal portfolio weights and asset allocation.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Risk-Adjusted</span>
+                        <span class="tag">Performance</span>
+                        <span class="tag">Optimization</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">🛡️</div>
+                    <div class="concept-title">Value at Risk (VaR)</div>
+                    <div class="concept-description">Quantifies maximum expected loss at confidence level. Essential for regulatory compliance, position sizing, and risk limits in trading operations.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Risk Metrics</span>
+                        <span class="tag">Quantile</span>
+                        <span class="tag">Compliance</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">⚠️</div>
+                    <div class="concept-title">Conditional Value at Risk (CVaR)</div>
+                    <div class="concept-description">Expected shortfall beyond VaR threshold. Captures tail risk severity, crucial for stress testing and extreme event scenario planning.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Tail Risk</span>
+                        <span class="tag">Stress Testing</span>
+                        <span class="tag">Advanced Risk</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">🔗</div>
+                    <div class="concept-title">Copula Methods</div>
+                    <div class="concept-description">Models dependency structures between assets beyond correlation. Captures tail dependence and non-linear relationships for robust diversification assessment.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Dependency</span>
+                        <span class="tag">Correlation</span>
+                        <span class="tag">Tail Events</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Meta-Strategy Section -->
+        <section>
+            <div class="section-header">
+                <h2>Strategy Development & Research Frameworks</h2>
+                <p>De Prado's Advances in Financial Machine Learning methodology</p>
+            </div>
+
+            <div class="category-title">Key Concepts</div>
+            <div class="concepts-grid">
+                <div class="concept-card">
+                    <div class="concept-icon">🧮</div>
+                    <div class="concept-title">Marcos López de Prado's Framework</div>
+                    <div class="concept-description">Comprehensive ML approach addressing look-ahead bias, proper backtesting, and feature engineering. Industry-standard methodology for developing robust quantitative strategies.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Framework</span>
+                        <span class="tag">Best Practices</span>
+                        <span class="tag">ML</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">🔄</div>
+                    <div class="concept-title">Hyperparameter Optimization</div>
+                    <div class="concept-description">Systematic tuning of model parameters using grid search, random search, or Bayesian optimization. Prevents overfitting while maximizing model performance.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Tuning</span>
+                        <span class="tag">Optimization</span>
+                        <span class="tag">Validation</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">✅</div>
+                    <div class="concept-title">Walk-Forward Validation</div>
+                    <div class="concept-description">Time-series aware backtesting avoiding look-ahead bias. Simulates realistic deployment by sequentially training on past data and testing on unseen future periods.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Backtesting</span>
+                        <span class="tag">Validation</span>
+                        <span class="tag">Realistic</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">📊</div>
+                    <div class="concept-title">Sharpe Ratio & Performance Metrics</div>
+                    <div class="concept-description">Risk-adjusted return metrics guiding strategy evaluation. Sharpe ratio, Sortino ratio, and Calmar ratio balance profitability with volatility and drawdowns.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Performance</span>
+                        <span class="tag">Metrics</span>
+                        <span class="tag">Evaluation</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">📉</div>
+                    <div class="concept-title">Drawdown Analysis</div>
+                    <div class="concept-description">Measures peak-to-trough declines during trading. Maximum drawdown indicates worst-case loss; essential for position sizing and psychological tolerance assessment.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Risk Metrics</span>
+                        <span class="tag">Performance</span>
+                        <span class="tag">Psychology</span>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-icon">🎯</div>
+                    <div class="concept-title">Kelly Criterion</div>
+                    <div class="concept-description">Optimal bet sizing formula maximizing long-term wealth growth. Determines position sizing based on edge and win probability for compound growth.</div>
+                    <div class="concept-tags">
+                        <span class="tag">Position Sizing</span>
+                        <span class="tag">Optimization</span>
+                        <span class="tag">Growth</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about">
+            <div class="section-header">
+                <h2>About This Project</h2>
+                <p>A comprehensive exploration of quantitative trading methodologies and advanced financial machine learning techniques</p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%); border: 1px solid var(--border); border-radius: 12px; padding: 2.5rem; margin: 2rem 0;">
+                <p style="color: var(--text-primary); margin-bottom: 1rem;">
+                    This research project documents advanced quantitative trading concepts spanning statistical analysis, machine learning, chaos theory, and portfolio optimization. The methodologies presented integrate classical financial theory with modern computational approaches.
+                </p>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    <strong>Focus Areas:</strong>
+                </p>
+                <ul style="color: var(--text-secondary); margin-left: 1.5rem; line-height: 2;">
+                    <li>Statistical signal processing and time series analysis</li>
+                    <li>Machine learning feature engineering and model selection</li>
+                    <li>Advanced risk metrics and portfolio construction</li>
+                    <li>Nonlinear dynamics and market regime detection</li>
+                    <li>Practical implementation of academic research</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p><strong>Quantitative Trading Research Platform</strong></p>
+        <p>Exploring systematic approaches to market analysis and algorithmic trading strategy development.</p>
+        <div class="footer-links">
+            <a href="#concepts">Concepts</a>
+            <a href="#strategies">Strategies</a>
+            <a href="#about">About</a>
+        </div>
+        <p style="margin-top: 2rem; font-size: 0.9rem;">© 2025 Independent Quant Trading Developer | Educational & Research Purposes</p>
+    </footer>
+
+    <script>
+        // Smooth scroll behavior and fade-in animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add fade-in animation to cards on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {threshold: 0.1});
+
+            document.querySelectorAll('.concept-card').forEach(card => {
+                card.style.opacity = '0';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
